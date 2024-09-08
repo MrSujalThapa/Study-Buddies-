@@ -65,11 +65,18 @@ module.exports.logout = (req, res, next) => {
 }
 
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 async function scrapeCourses(program) {
     const url = `https://uwaterloo.ca/future-students/programs/${program}`;
-    const browser = await puppeteer.launch();
+
+    // Launch puppeteer with the correct configuration for Render
+    const browser = await puppeteer.launch({
+        headless: true, // Ensure it runs headless
+        executablePath: '/usr/bin/google-chrome', // Point to the Chrome installation path in Render (update if needed)
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for many cloud environments
+    });
+
     const page = await browser.newPage();
 
     // Go to the page and wait for full content to load
