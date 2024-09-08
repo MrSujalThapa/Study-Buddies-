@@ -1,0 +1,63 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">New Study Session</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="http://localhost:3000/newStudySession" method="POST" novalidate class="validated-form">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="title" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="location" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <!-- <div class="mb-3">
+                    <label class="form-label" for="tme">Time</label>
+                    <input class="form-control" type="time" id="time" name="session[time]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div> -->
+                <div class="mb-3">
+                    <label class="form-label" for="course">Course</label>
+                    <select class="form-select" name="course" id="course">
+                        <% if (courses && courses.length > 0) { %>
+                            <% courses.forEach(course => { %>
+                                <option value="<%= course.title %>"><%= course.title %></option>
+                            <% }) %>
+                        <% } else { %>
+                            <option value="">No courses available</option>
+                        <% } %>
+                    </select>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="description"
+                        required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="time">Time</label>
+                    <input class="form-control" type="time" id="time" name="time" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Study Session</button>
+                </div>
+            </form>
+            <a href="/studySession">All Study Sessions</a>
+        </div>
+    </div>

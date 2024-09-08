@@ -1,0 +1,70 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+    <div class="card mb-3 col-6">
+        <div class="card-body">
+            <h5 class="card-title">
+                <%= studySessions.title %> - <%= studySessions.course %>
+            </h5>
+            <p class="card-text">
+                <%= studySessions.description %>
+            </p>
+            <p class="card-text">
+                <strong>Time:</strong> <%= studySessions.time %>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-muted">
+                <%= studySessions.location %>
+            </li>
+            <li class="list-group-item">
+                Submitted by <%= studySessions.author.username %>
+                
+                <% if (currentUser && currentUser._id.equals(studySessions.author._id)) { %>
+                    <form action="/studySession/<%= studySessions._id %>?_method=DELETE" method="POST" class="d-inline">
+                        <button class="btn-sm p-1 btn-danger ml-3 btn-sm">Delete Session</button>
+                    </form>
+                <% } %>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <!-- Party (Users who joined) -->
+    <div class="card mb-3 col-6">
+        <div class="card-body">
+            <h5 class="card-title">Party:</h5>
+            <p>
+                <!-- Joined usernames -->
+                <% let joinedUsernames = studySessions.joined.map(user => user.username).join(', '); %>
+                <%= joinedUsernames %>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush mb-3">
+            <% if (currentUser && !studySessions.joined.some(user => user.equals(currentUser._id))) { %>
+                <!-- Join button if the user hasn't joined -->
+                <form action="/studySession/<%= studySessions._id %>" method="POST">
+                    <button class="btn col-6 offset-3 btn-success">Join</button>
+                </form>
+            <% } else if (currentUser && studySessions.joined.some(user => user.equals(currentUser._id)) && !studySessions.author.equals(currentUser._id)) { %>
+                <!-- Leave button if the user has joined but is not the author -->
+                <form action="/studySession/<%= studySessions._id %>/leave" method="POST">
+                    <button class="btn col-6 offset-3 btn-danger">Leave</button>
+                </form>
+            <% } %>
+        </ul>
+    </div>
+</div>
+
+<!-- Map Section -->
+<div class="col-12">
+    <div id='map'></div>
+</div>
+
+<script>
+    const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+    const studySessions = <%- JSON.stringify(studySessions) %>;
+</script>
+
+<script src="/javascripts/showPageMap.js"></script>

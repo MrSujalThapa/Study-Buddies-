@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate')%>
+<div id="cluster-map" style="height: 500px;"></div>
+<div class="container">
+    <h1>All Active Sessions</h1>
+    <% for (let studySession of studySessions){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt=""
+                        src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2968&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= studySession.title %> - <%= studySession.course %></h5>
+                        <p class="card-text">
+                            Joined by: 
+                            <% if (studySession.joined.length > 0) { %>
+                                <% studySession.joined.forEach((user, index) => { %>
+                                    <%= user.username %><%= index !== studySession.joined.length - 1 ? ', ' : '' %>
+                                <% }) %>
+                            <% } else { %>
+                                No one has joined yet.
+                            <% } %>
+                        </p>
+                        <p class="card-text">
+                            <%= studySession.time %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted"><%= studySession.location %></small>
+                        </p>
+                        <a class="btn btn-primary" href="/studySession/<%= studySession._id %>">View: <%= studySession.title %></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+    const studySessions = { features: <%- JSON.stringify(studySessions) %> };
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
