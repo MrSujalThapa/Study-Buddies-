@@ -70,10 +70,14 @@ module.exports.logout = (req, res, next) => {
 async function scrapeCourses(program) {
     const url = `https://uwaterloo.ca/future-students/programs/${program}`;
 
-    // Launch Puppeteer without specifying executablePath
+    // Launch Puppeteer with Chrome path
     const browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for cloud environments like Render
+        args: [
+            '--no-sandbox', 
+            '--disable-setuid-sandbox'
+        ],
+        executablePath: process.env.CHROME_BIN || null // Use environment variable or null if not set
     });
 
     const page = await browser.newPage();
