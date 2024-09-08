@@ -4,11 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon index.js",
-<<<<<<< HEAD
-    "postinstall": "npx puppeteer install chrome" 
-=======
    "postinstall": "npx puppeteer browsers install chrome"
->>>>>>> 796f28236f653200b4fbbb6d74050a54dfea4328
   },
   "keywords": [],
   "author": "",
