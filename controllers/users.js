@@ -68,19 +68,21 @@ module.exports.logout = (req, res, next) => {
 
 
 async function scrapeCourses(program) {
+    const url = `https://uwaterloo.ca/future-students/programs/${program}`;
+
+    // Launch Puppeteer without specifying executablePath
     const browser = await puppeteer.launch({
-        headless: true, // Ensure it runs headless
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for cloud environments
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for cloud environments like Render
     });
 
     const page = await browser.newPage();
-    const url = `https://uwaterloo.ca/future-students/programs/${program}`;
     await page.goto(url, { waitUntil: 'networkidle2' });
 
-    // Wait for the element to load
+    // Wait for the ul element to load
     await page.waitForSelector('.uw-copy-text__wrapper ul');
 
-    // Extract the courses
+    // Extract and return the courses
     const courses = await page.evaluate(() => {
         const ulElement = document.querySelector('.uw-copy-text__wrapper ul');
         if (!ulElement) return [];
