@@ -68,46 +68,31 @@ module.exports.logout = (req, res, next) => {
 
 
 async function scrapeCourses(program) {
-    const url = `https://uwaterloo.ca/future-students/programs/${program}`;
-
-    // Launch puppeteer with headless mode and no sandboxing
     const browser = await puppeteer.launch({
         headless: true, // Ensure it runs headless
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for cloud environments
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for cloud environments
     });
 
     const page = await browser.newPage();
-
-    // Go to the page and wait for full content to load
+    const url = `https://uwaterloo.ca/future-students/programs/${program}`;
     await page.goto(url, { waitUntil: 'networkidle2' });
 
-    // Wait for the ul element to ensure the content is loaded
-    try {
-        await page.waitForSelector('.uw-copy-text__wrapper ul', { timeout: 30000 });
-    } catch (error) {
-        console.error('Error waiting for selector:', error);
-        await browser.close();
-        return [];
-    }
+    // Wait for the element to load
+    await page.waitForSelector('.uw-copy-text__wrapper ul');
 
-    // Extract and process the content of each li element
+    // Extract the courses
     const courses = await page.evaluate(() => {
-        // Select the ul element
         const ulElement = document.querySelector('.uw-copy-text__wrapper ul');
-        if (!ulElement) {
-            console.error('ul element not found!');
-            return [];
-        }
+        if (!ulElement) return [];
 
-        // Get all li elements and return their innerHTML
         const liElements = ulElement.querySelectorAll('li');
         return Array.from(liElements).map(li => {
             const content = li.innerHTML;
             const parts = content.split('–');
             return {
-                title: parts.length > 1 ? parts[1].trim() : '' // Keep only the part after the hyphen
+                title: parts.length > 1 ? parts[1].trim() : ''
             };
-        }).filter(course => course.title); // Remove any courses with empty titles
+        }).filter(course => course.title);
     });
 
     await browser.close();
