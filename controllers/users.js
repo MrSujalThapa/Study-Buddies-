@@ -1,5 +1,7 @@
 const User = require('../models/user');
 
+const puppeteer = require('puppeteer');
+
 module.exports.renderRegister = (req, res) => {
     res.render('users/register'); 
 }
@@ -65,16 +67,13 @@ module.exports.logout = (req, res, next) => {
 }
 
 
-const puppeteer = require('puppeteer-core');
-
 async function scrapeCourses(program) {
     const url = `https://uwaterloo.ca/future-students/programs/${program}`;
 
-    // Launch puppeteer with the correct configuration for Render
+    // Launch puppeteer with headless mode and no sandboxing
     const browser = await puppeteer.launch({
         headless: true, // Ensure it runs headless
-        executablePath: '/usr/bin/google-chrome', // Point to the Chrome installation path in Render (update if needed)
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for many cloud environments
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for cloud environments
     });
 
     const page = await browser.newPage();
