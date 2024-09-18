@@ -25,6 +25,6 @@ A dashboard so that a user can see what sessions they are currently in, friends 
 A method for creating online study sessions so that the website can become more accessible - however many safety features and precautions have to be implemented for this to work correctly. 
 Expand the web-scraper to be implemented for all university students because at the moment it’s only usable for Waterloo engineering students.
 
-PitcH:https://www.youtube.com/watch?v=-IvyGUuWHbU&ab_channel=SujalThapa
+Pitch:https://www.youtube.com/watch?v=-IvyGUuWHbU&ab_channel=SujalThapa
 
 hosted APP: https://study-buddies-zgap.onrender.com/
